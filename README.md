@@ -49,6 +49,11 @@ Run these commands
 ```
 1. Reloads the privilege tables in MySQL to ensure the changes made with GRANT or CREATE USER take effect immediately.
 
+```
+   SHOW BINARY LOG STATUS;
+```
+Copy the **FileName** and **FilePosition**.
+
 ### 2. Slave Database Instance
 Run the following command to create a MySQL container for the **slave database**:
 ```bash
@@ -58,4 +63,26 @@ docker run --name slave \
   -p 3308:3306 \
   -d mysql:latest
 ```
+
+Stop the slave
+```
+   STOP REPLICA;
+```
+
+Execute this:
+```
+CHANGE REPLICATION SOURCE TO
+  SOURCE_HOST='master-host',
+  SOURCE_PORT=3307,
+  SOURCE_USER='repl',
+  SOURCE_PASSWORD='repl_password',
+  SOURCE_LOG_FILE='FileName',
+  SOURCE_LOG_POS=FilePosition;
+```
+
+```
+   START REPLICA;
+   SHOW REPLICA STATUS\G;
+```
+
 
