@@ -18,10 +18,15 @@
 
 ## Setup Instructions
 
+```
+docker network create mysql-replication
+```
+
 ### 1. Master Database Instance
 Run the following command to create a MySQL container for the **master database**:
 ```bash
 docker run --name master \
+  --network mysql-replication \
   -e MYSQL_ROOT_PASSWORD=password \
   -e MYSQL_ROOT_HOST=% \
   -p 3307:3306 \
@@ -58,10 +63,15 @@ Copy the **FileName** and **FilePosition**.
 Run the following command to create a MySQL container for the **slave database**:
 ```bash
 docker run --name slave \
+  --network mysql-replication
   -e MYSQL_ROOT_PASSWORD=password \
   -e MYSQL_ROOT_HOST=% \
   -p 3308:3306 \
   -d mysql:latest
+```
+
+```
+   docker exec -it slave mysql -u root -p
 ```
 
 Stop the slave
@@ -71,13 +81,7 @@ Stop the slave
 
 Execute this:
 ```
-CHANGE REPLICATION SOURCE TO
-  SOURCE_HOST='master-host',
-  SOURCE_PORT=3307,
-  SOURCE_USER='repl',
-  SOURCE_PASSWORD='repl_password',
-  SOURCE_LOG_FILE='FileName',
-  SOURCE_LOG_POS=FilePosition;
+   CHANGE REPLICATION SOURCE TO SOURCE_HOST='master-host',SOURCE_PORT=3307,SOURCE_USER='repl',SOURCE_PASSWORD='repl_password',SOURCE_LOG_FILE='FileName',SOURCE_LOG_POS=FilePosition;
 ```
 
 ```
