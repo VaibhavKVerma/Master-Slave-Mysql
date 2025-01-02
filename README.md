@@ -54,10 +54,6 @@ FLUSH PRIVILEGES;
 ```
 1. Reloads the privilege tables in MySQL to ensure the changes made with GRANT or CREATE USER take effect immediately.
 
-```
-SHOW BINARY LOG STATUS;
-```
-Copy the **FileName** and **FilePosition**.
 
 ```
 docker ps -a
@@ -86,6 +82,26 @@ docker inspect master_container_id
 ```
 
 Copy **IP Address**
+
+Restart master container
+```
+docker restart master
+```
+
+Log into master container using:
+```bash
+docker exec -it master mysql -u root -p
+```
+
+For version 8.x
+```
+SHOW MASTER STATUS;
+```
+For version 9.x and above
+```
+SHOW BINARY LOG STATUS;
+```
+Copy the **FileName** and **FilePosition**.
 
 ### 2. Slave Database Instance
 Run the following command to create a MySQL container for the **slave database**:
@@ -123,15 +139,33 @@ docker exec -it slave mysql -u root -p
 ```
 
 Stop the slave
+
+For version 8.x
+```
+STOP SLAVE;
+```
+For version 9.x and above
 ```
 STOP REPLICA;
 ```
 
 Execute this:
+
+For version 8.x
+```
+CHANGE MASTER TO MASTER_HOST='MasterHost',MASTER_PORT=3306,MASTER_USER='root',MASTER_PASSWORD='password',MASTER_LOG_FILE='FileName',MASTER_LOG_POS=FilePosition,GET_MASTER_PUBLIC_KEY=1;
+```
+For version 9.x and above
 ```
 CHANGE REPLICATION SOURCE TO SOURCE_HOST='MasterHost',SOURCE_PORT=3306,SOURCE_USER='repl',SOURCE_PASSWORD='repl_password',SOURCE_LOG_FILE='FileName',SOURCE_LOG_POS=FilePosition;
 ```
 
+For version 8.x
+```
+START SLAVE;
+SHOW SLAVE STATUS\G;
+```
+For version 9.x and above
 ```
 START REPLICA;
 SHOW REPLICA STATUS\G;
