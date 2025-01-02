@@ -30,7 +30,7 @@ docker run --name master \
   -e MYSQL_ROOT_PASSWORD=password \
   -e MYSQL_ROOT_HOST=% \
   -p 3307:3306 \
-  -d mysql:latest
+  -d mysql:8.0
 ```
 Log into master container using:
 ```bash
@@ -95,7 +95,7 @@ docker run --name slave \
   -e MYSQL_ROOT_PASSWORD=password \
   -e MYSQL_ROOT_HOST=% \
   -p 3308:3306 \
-  -d mysql:latest
+  -d mysql:8.0
 ```
 
 ```
@@ -129,7 +129,7 @@ STOP REPLICA;
 
 Execute this:
 ```
-CHANGE REPLICATION SOURCE TO SOURCE_HOST='master-host',SOURCE_PORT=3306,SOURCE_USER='repl',SOURCE_PASSWORD='repl_password',SOURCE_LOG_FILE='FileName',SOURCE_LOG_POS=FilePosition;
+CHANGE REPLICATION SOURCE TO SOURCE_HOST='MasterHost',SOURCE_PORT=3306,SOURCE_USER='repl',SOURCE_PASSWORD='repl_password',SOURCE_LOG_FILE='FileName',SOURCE_LOG_POS=FilePosition;
 ```
 
 ```
