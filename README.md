@@ -38,7 +38,7 @@ docker exec -it master mysql -u root -p
 ```
 Run these commands
 ```
-CREATE USER 'repl'@'%' IDENTIFIED WITH 'caching_sha2_password' BY 'repl_password';
+CREATE USER 'repl'@'%' IDENTIFIED BY 'repl_password';
 ```
 1. Creates a new user named `repl` with the password `repl_password`.
 2. `repl` : The username for the replication user.
