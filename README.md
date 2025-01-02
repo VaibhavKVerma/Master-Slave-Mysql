@@ -135,6 +135,7 @@ docker cp ./mysql/master/my.cnf slave_container_id:/etc
 ```
 
 ```
+docker restart slave
 docker exec -it slave mysql -u root -p
 ```
 
